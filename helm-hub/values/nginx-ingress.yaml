@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+spec:
+  ingressClassName: nginx # 要配置这个field，不然nginx-ingress动态加载不了配置到nginx
+  rules:
+  - host: nginx.testdomain.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx
+          servicePort: 80

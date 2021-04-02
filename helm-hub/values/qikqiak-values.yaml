@@ -1,0 +1,28 @@
+expose:
+  type: ingress
+  tls:
+    enabled: true
+  ingress:
+    hosts:
+      core: registry.qikqiak.com
+      notary: notary.qikqiak.com
+
+externalURL: https://registry.qikqiak.com # 访问地址
+
+
+persistence:
+  enabled: true
+  resourcePolicy: "keep"
+  persistentVolumeClaim:
+    registry:
+      existingClaim: "my-pvc"
+    chartmuseum:
+      existingClaim: "my-pvc"
+    jobservice:
+      existingClaim: "my-pvc"
+    database:
+      existingClaim: "my-pvc"
+    redis:
+      existingClaim: "my-pvc"
+    trivy:
+      existingClaim: "my-pvc"
