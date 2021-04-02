@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ template "redis.fullname" . }}
+  labels:
+    app: {{ template "redis.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  capacity:
+    storage: {{ .Values.persistence.size | quote }}
+  volumeMode: {{ .Values.persistence.model }}
+  accessModes:
+    - {{ .Values.persistence.accessMode | quote }}
+  storageClassName: "{{ .Values.persistence.storageClass }}"
+  persistentVolumeReclaimPolicy: {{ .Values.persistence.ploicy }}
+  hostPath: 
+    path: {{ .Values.persistence.local }}
+    type: {{ .Values.persistence.type }}
+  # nodeAffinity: 
+  #   required: 
+  #     nodeSelectorTerms:
+  #     - matchExpressions:
+  #       - key: {{ .Values.nodeAffinity.key }}
+  #         operator: In
+  #         values:
+  #         - {{ .Values.nodeAffinity.value }}
