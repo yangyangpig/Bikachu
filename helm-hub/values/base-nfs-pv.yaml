@@ -9,7 +9,6 @@ spec:
     storage: 10Gi # 指定pv的容量为10Gi
   accessModes:
     - ReadWriteMany  # pv能以readWriteMany模式mount到单个节点
-
   storageClassName: nfs
   nfs:
     path: /home/vagrant/nfsshare

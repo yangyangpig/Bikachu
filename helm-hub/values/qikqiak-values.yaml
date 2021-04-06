@@ -15,14 +15,14 @@ persistence:
   resourcePolicy: "keep"
   persistentVolumeClaim:
     registry:
-      existingClaim: "my-pvc"
+      existingClaim: "base-nfs-pvc"
     chartmuseum:
-      existingClaim: "my-pvc"
+      existingClaim: "base-nfs-pvc"
     jobservice:
-      existingClaim: "my-pvc"
+      existingClaim: "base-nfs-pvc"
     database:
-      existingClaim: "my-pvc"
+      existingClaim: "base-nfs-pvc"
     redis:
-      existingClaim: "my-pvc"
+      existingClaim: "base-nfs-pvc"
     trivy:
-      existingClaim: "my-pvc"
+      existingClaim: "base-nfs-pvc"

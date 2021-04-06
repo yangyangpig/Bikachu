@@ -4,8 +4,9 @@ metadata:
   name: test-pv-pvc
 spec:
   containers:
-  - image: ubuntu:latest
-    name: base-ubuntu
+  - image: luksa/kubia:latest
+    imagePullPolicy: IfNotPresent
+    name: kubia
     volumeMounts:
     - name: nsf
       mountPath: /data
