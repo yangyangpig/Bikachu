@@ -86,6 +86,9 @@ controller:
   ## The node selector for pod assignment for the Ingress controller pods.
   nodeSelector: {}
 
+  masterNode:
+    nodeName: k8s-master
+
   ## The termination grace period of the Ingress controller pod.
   terminationGracePeriodSeconds: 30
 
@@ -200,7 +203,8 @@ controller:
     loadBalancerIP: ""
 
     ## The list of external IPs for the Ingress controller service.
-    externalIPs: []
+    ## need to change
+    externalIPs: ["192.168.50.10","192.168.50.11","192.168.50.12"]
 
     ## The IP ranges (CIDR) that are allowed to access the load balancer. Requires controller.service.type set to LoadBalancer. The cloud provider must support this feature.
     loadBalancerSourceRanges: []
@@ -284,6 +288,7 @@ controller:
 
   ## Enable collection of latency metrics for upstreams. Requires prometheus.create.
   enableLatencyMetrics: false
+
 
 rbac:
   ## Configures RBAC.

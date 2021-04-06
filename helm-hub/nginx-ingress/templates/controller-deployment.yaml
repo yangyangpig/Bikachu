@@ -26,6 +26,9 @@ spec:
 {{- end }}
 {{- end }}
     spec:
+{{- if .Values.controller.masterNode }}
+{{toYaml .Values.controller.masterNode | indent 6 }}
+{{- end }}
 {{- if .Values.controller.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.controller.nodeSelector | indent 8 }}
