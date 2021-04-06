@@ -39,10 +39,10 @@ spec:
         image: {{ .Values.database.internal.image.repository }}:{{ .Values.database.internal.image.tag }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         command: ["/bin/sh"]
-        args: ["-c", "chown -R postgres:postgres /var/lib/postgresql/data"]
+        args: ["-c", "chown -R postgres:postgres /var/lib/postgresql/datav2"]
         volumeMounts:
         - name: database-data
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql/datav2
           subPath: {{ $database.subPath }}
       - name: "remove-lost-found"
         image: {{ .Values.database.internal.image.repository }}:{{ .Values.database.internal.image.tag }}
@@ -50,7 +50,7 @@ spec:
         command: ["rm", "-Rf", "/var/lib/postgresql/data/lost+found"]
         volumeMounts:
         - name: database-data
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql/datav2
           subPath: {{ $database.subPath }}
       containers:
       - name: database
@@ -77,7 +77,7 @@ spec:
               name: "{{ template "harbor.database" . }}"
         volumeMounts:
         - name: database-data
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql/datav2
           subPath: {{ $database.subPath }}
       {{- if not .Values.persistence.enabled }}
       volumes:

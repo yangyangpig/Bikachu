@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant_data":{"guestpath":"/vagrant_data","hostpath":"/Users/launch/vagrant-vm/Bikachu/base-ubuntu/data","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/launch/vagrant-vm/Bikachu/base-ubuntu","disabled":false,"__vagrantfile":true}}}
