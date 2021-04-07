@@ -50,7 +50,15 @@ controller:
     annotations: {}
 
     ## The entries of the ConfigMap for customizing NGINX configuration.
-    entries: {}
+    entries: 
+      proxy-body-size: "50m"
+      proxy-connect-timeout: "15"
+      proxy-read-timeout: "600"
+      proxy-send-timeout: "600"
+      hsts-include-subdomains: "false"
+      body-size: "64m"
+      server-name-hash-bucket-size: "256"
+      client-max-body-size: "50m"
 
   ## It is recommended to use your own TLS certificates and keys
   defaultTLS:
