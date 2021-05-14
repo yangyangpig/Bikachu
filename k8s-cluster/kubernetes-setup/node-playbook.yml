@@ -108,13 +108,13 @@
 
 
 
-  - name: Copy the join command to server location
-    copy: src=/vagrant_data/join-command dest=/tmp/join-command.sh owner=root group=root mode=0777
+  # - name: Copy the join command to server location
+  #   copy: src=/vagrant_data/join-command dest=/tmp/join-command.sh owner=root group=root mode=0777
 
-  - name: Join the node to cluster
-    become_method: sudo
-    become_user: root
-    command: sh /tmp/join-command.sh
+  # - name: Join the node to cluster
+  #   become_method: sudo
+  #   become_user: root
+  #   command: sh /tmp/join-command.sh
 
 
 

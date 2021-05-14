@@ -1,29 +1,29 @@
 apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
+kind: Gateway # 定义了服务从外面怎么样访问
 metadata:
   name: bookinfo-gateway
 spec:
-  selector:
+  selector: # 必选，选择器,表示Gateway负载，为入口处的Envoy的那name，推荐gateway和ingress在同一个namespace
     istio: ingressgateway # use istio default controller
-  servers:
+  servers: # 定义了服务访问入口
   - port:
       number: 80
       name: http
       protocol: HTTP
-    hosts:
+    hosts: # 发布的服务地址
     - "*"
 ---
 apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
+kind: VirtualService # 匹配到内部服务怎么流转
 metadata:
   name: bookinfo
 spec:
-  hosts:
+  hosts: # 和gateway的hosts保持一致
   - "*"
-  gateways:
+  gateways: # 指定gateway的name
   - bookinfo-gateway
   http:
-  - match:
+  - match: # 表示htto请求满足的条件，支持将http属性如uri、scheme、method、authority、port作为条件来匹配
     - uri:
         exact: /productpage
     - uri:
@@ -34,7 +34,7 @@ spec:
         exact: /logout
     - uri:
         prefix: /api/v1/products
-    route:
+    route: # 指定htto的流量目标
     - destination:
         host: productpage
         port:
