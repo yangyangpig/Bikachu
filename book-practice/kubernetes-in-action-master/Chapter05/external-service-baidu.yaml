@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-service-baidu
+spec:
+  type: ExternalName # 创建externalName类型服务，主要用于k8s内部服务连接外部服务，比如数据库
+  externalName: baidu.com
+  ports:
+  - port: 80
