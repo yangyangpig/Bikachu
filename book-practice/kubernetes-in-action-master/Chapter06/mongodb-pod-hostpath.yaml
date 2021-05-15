@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb 
+spec:
+  volumes:
+  - name: mongodb-data
+    hostPath: # 在工作节点的指定目录挂载到容器中
+      path: /vagrant_data
+  containers:
+  - image: mongo
+    name: mongodb
+    volumeMounts:
+    - name: mongodb-data
+      mountPath: /data
+    ports:
+    - containerPort: 27017
+      protocol: TCP
+
