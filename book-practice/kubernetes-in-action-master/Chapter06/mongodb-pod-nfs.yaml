@@ -6,7 +6,7 @@ spec:
   volumes:
   - name: mongodb-data
     nfs:
-      server: 1.2.3.4
+      server: 1.2.3.4 # nfs服务器地址
       path: /some/path
   containers:
   - image: mongo

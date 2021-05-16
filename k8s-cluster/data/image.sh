@@ -1,10 +1,10 @@
 #!/bin/bash
 
 images=(
-    kube-apiserver:v1.21.0
-    kube-controller-manager:v1.21.0
-    kube-scheduler:v1.21.0
-    kube-proxy:v1.21.0
+    kube-apiserver:v1.21.1
+    kube-controller-manager:v1.21.1
+    kube-scheduler:v1.21.1
+    kube-proxy:v1.21.1
     pause:3.4.1
     etcd:3.4.13-0
     #coredns:v1.8.0

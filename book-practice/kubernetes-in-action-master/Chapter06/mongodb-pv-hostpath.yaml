@@ -9,5 +9,5 @@ spec:
     - ReadWriteOnce
     - ReadOnlyMany
   persistentVolumeReclaimPolicy: Retain
-  hostPath:
+  hostPath: # 从工作节点中的指定目录挂载到容器中
     path: /tmp/mongodb

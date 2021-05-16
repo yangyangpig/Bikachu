@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant_data":{"create":true,"guestpath":"/vagrant_data","hostpath":"/Users/david/github/Bikachu/k8s-cluster/data","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/david/github/Bikachu/k8s-cluster","disabled":false,"__vagrantfile":true}}}
