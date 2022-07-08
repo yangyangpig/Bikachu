@@ -1,0 +1,159 @@
+---
+- hosts: 192.168.64.9 # 需要针对真是ip修改
+  become: true
+  tasks:
+  - name: copy update_apt_source.sh
+    copy:
+      src: "./update_apt_source.sh"
+      dest: "/etc/apt"
+      owner: root
+      group: root
+      mode: 0777
+  - name: begin to change source 
+    shell: /etc/apt/update_apt_source.sh
+
+  - name: Install packages that allow apt to be used over HTTPS
+    apt:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+      - lsb-release
+
+  # - name: Add an apt signing key for Docker
+  #   apt_key:
+  #     url: https://download.docker.com/linux/ubuntu/gpg
+  #     state: present
+
+
+  # - name: Set the stable docker repository
+  #   apt_repository: 
+  #     repo: "deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  #     state: present
+  #     update_cache: yes
+  - name: copy set_docker_rep.sh
+    copy:
+      src: "./set_docker_rep.sh"
+      dest: "/etc/apt"
+      owner: root
+      group: root
+      mode: 0777
+  - name: begin to set docker repository source
+    shell: /etc/apt/set_docker_rep.sh
+
+  - name: Install docker and its dependecies
+    apt: 
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io
+    notify:
+      - docker status
+
+  - name: Add ubuntu user to docker group
+    user:
+      name: ubuntu
+      group: docker
+
+
+
+  - name: Remove swapfile from /etc/fstab
+    mount:
+      name: "{{ item }}"
+      fstype: swap
+      state: absent
+    with_items:
+      - swap
+      - none
+
+  - name: Disable swap
+    command: swapoff -a
+    #when: ansible_swaptotal_mb > 0
+
+
+  - name: Add an apt signing key for Kubernetes
+    apt_key:
+      url: https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg
+      state: present
+
+
+  - name: Adding apt repository for Kubernetes
+    apt_repository:
+      repo: deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
+      state: present
+      filename: kubernetes.list
+
+  - name: Install Kubernetes binaries
+    apt: 
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+        - kubelet 
+        - kubeadm
+        - kubectl
+
+  - name: Configure node ip
+    lineinfile:
+      path: /etc/default/kubelet
+      line: KUBELET_EXTRA_ARGS=--node-ip=192.168.64.9 # 需要针对真是ip修改
+      create: yes
+
+  - name: Restart kubelet
+    service:
+      name: kubelet
+      daemon_reload: yes
+      state: restarted
+
+
+  - name: load images
+    shell: bash /Users/davidliu/virtualenv/multipassenv/k8s-master-data/image.sh
+
+  - name: remove containerd config and restart containerd
+    command: "{{ item }}"
+    with_items:
+      - rm /etc/containerd/config.toml
+      - systemctl restart containerd
+
+  - name: Initialize the Kubernetes cluster using kubeadm
+    # command: kubeadm init --apiserver-advertise-address="192.168.50.10" --apiserver-cert-extra-sans="192.168.50.10"  --node-name k8s-master --pod-network-cidr=192.168.0.0/16
+    # cidr用上面那个，会和node的ip有冲突，导致kube-apiserver访问10.96.0.1:443失败
+    # 需要针对真是ip修改
+    command: kubeadm init --apiserver-advertise-address="192.168.64.9" --apiserver-cert-extra-sans="192.168.64.9"  --node-name k8s-master --pod-network-cidr=172.16.0.0/16
+  - name: Setup kubeconfig for vagrant user
+    command: "{{ item }}"
+    with_items:
+     - mkdir -p /home/ubuntu/.kube
+     - cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
+     - chown ubuntu:ubuntu /home/ubuntu/.kube/config
+     
+  - name: Install calico pod network
+    become: false
+    command: kubectl create -f https://docs.projectcalico.org/manifests/calico.yaml
+
+
+  # - name: Generate join command
+  #   command: kubeadm token create --print-join-command
+  #   register: join_command
+  
+
+  # - name: Copy join command to local file
+  #   become_method: sudo
+  #   become_user: root
+  #   local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="/vagrant_data/join-command"
+
+  handlers:
+    - name: docker status
+      service: name=docker state=started       
+
